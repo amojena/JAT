@@ -43,6 +43,7 @@ public class JAT extends JFrame {
     private DefaultListModel appList;
     private Vector<jobApp> applications;
     private Vector<JTextField> textFields;
+    private XMLparser parser;
 
 
 
@@ -61,6 +62,8 @@ public class JAT extends JFrame {
         textFields.addElement(urlTxt);
         textFields.addElement(usernameTxt);
         textFields.addElement(jobIDtxt);
+
+        parser = new XMLparser();
 
         //clear button functionality
         clearButton.addActionListener(new ActionListener() {
@@ -98,6 +101,8 @@ public class JAT extends JFrame {
                 //update list in main window
                 appList.addElement(compName + " - " + jobTitle);
                 applicationsList.setModel(appList);
+
+                parser.write(applications);
 
             }
         });

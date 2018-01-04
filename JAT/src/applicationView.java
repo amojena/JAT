@@ -22,6 +22,10 @@ public class applicationView {
     private JPanel labelPanel;
     private JPanel showPanel;
     public JPanel mainPanel;
+    private JPanel topSpacePanel;
+    private JPanel bottomSpacePanel;
+    private JPanel leftSpacePanel;
+    private JPanel rightSpacePanel;
 
     void showApp(jobApp app)
     {
