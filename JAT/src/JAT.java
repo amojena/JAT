@@ -38,12 +38,14 @@ public class JAT extends JFrame {
     private JPanel mainPanel;
     private JLabel applicationsSaved;
     private JLabel applicationsSavedValue;
+    private JButton deleteApplicationButton;
 
 
     private DefaultListModel appList;
     private Vector<jobApp> applications;
     private Vector<JTextField> textFields;
     private XMLparser parser;
+    private Vector<jobApp> appXML;
 
 
 
@@ -51,8 +53,6 @@ public class JAT extends JFrame {
         //create List for main window
         appList = new DefaultListModel();
 
-        //saved applications will be added to this vector
-        applications = new Vector<>(1,1);
 
         //group text fields for clearing purposes
         textFields = new Vector<>(7);
@@ -64,6 +64,20 @@ public class JAT extends JFrame {
         textFields.addElement(jobIDtxt);
 
         parser = new XMLparser();
+
+        //saved applications will be added to this vector
+        applications = parser.getExistingApplications();
+        if (applications.size() > 0) { applicationsSavedValue.setText(Integer.toString(applications.elementAt(0).applicationsSaved)); }
+
+        //update list in main window
+        for(int i = 0; i < applications.size(); i++)
+        {
+            jobApp temp = applications.elementAt(i);
+            appList.addElement(temp.companyName + " - " + temp.jobTitle);
+            applicationsList.setModel(appList);
+        }
+
+
 
         //clear button functionality
         clearButton.addActionListener(new ActionListener() {
@@ -89,6 +103,15 @@ public class JAT extends JFrame {
                 String password = passwordTxt.getText();
                 boolean heardBack = heardBackBtn.isSelected();
 
+                //validate company name and job title before creating an application object
+                if (compName.equals("") | jobTitle.equals(""))
+                {
+                    //display an error message
+                    JFrame noSave = new JFrame();
+                    JOptionPane.showMessageDialog(noSave, "You must input a Company Name and Job Title.", "Error", JOptionPane.PLAIN_MESSAGE);
+                    return; //exit function
+                }
+
                 //create an application object
                 jobApp j = new jobApp(compName, jobTitle, jobID, type, applied, url, username, password, heardBack);
 
@@ -99,7 +122,7 @@ public class JAT extends JFrame {
                 applicationsSavedValue.setText(Integer.toString(j.applicationsSaved));
 
                 //update list in main window
-                appList.addElement(compName + " - " + jobTitle);
+                appList.addElement(j.companyName + " - " + j.jobTitle);
                 applicationsList.setModel(appList);
 
                 parser.write(applications);
@@ -121,6 +144,20 @@ public class JAT extends JFrame {
 
             }
         });
+
+        //delete button functionality
+        deleteApplicationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(applicationsList.getSelectedIndex() != -1)
+                {
+                    applications.remove(applicationsList.getSelectedIndex());
+                    parser.delete(applicationsList.getSelectedIndex());
+                    appList.remove(applicationsList.getSelectedIndex());
+                    applicationsSavedValue.setText(Integer.toString(applications.size()));
+                }
+            }
+        });
     }
 
     private void clearFields()
@@ -134,7 +171,6 @@ public class JAT extends JFrame {
         appliedBtn.setSelected(false);
         heardBackBtn.setSelected(false);
         typeComboBox.setSelectedIndex(0);
-
     }
 
     public static void main(String[] args) {
