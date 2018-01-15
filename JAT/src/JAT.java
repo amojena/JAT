@@ -151,10 +151,20 @@ public class JAT extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(applicationsList.getSelectedIndex() != -1)
                 {
+                    //remove selected application from saved applications vector
                     applications.remove(applicationsList.getSelectedIndex());
+
+                    //delete from xml
                     parser.delete(applicationsList.getSelectedIndex());
+
+                    //remove from list displayed in gui
                     appList.remove(applicationsList.getSelectedIndex());
+
+                    //decrease amount of applictions saved by 1
                     applicationsSavedValue.setText(Integer.toString(applications.size()));
+
+                    //overwrite xml file
+                    parser.overwrite(applications);
                 }
             }
         });

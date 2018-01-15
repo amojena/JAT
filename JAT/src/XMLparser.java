@@ -23,7 +23,7 @@ public class XMLparser {
                 doc = retrieveFile();
                 listNode = (Element) doc.getElementsByTagName("List").item(0);
             }
-            else {
+            else{
                 doc = createFile();
                 listNode = doc.createElement("List");
                 doc.appendChild(listNode);
@@ -170,9 +170,10 @@ public class XMLparser {
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse("test.xml");
             Element app = (Element) doc.getElementsByTagName("Application").item(index);
-            Node parent = app.getParentNode();
+            app.getParentNode().removeChild(app);
+            /*Node parent = app.getParentNode();
             parent.removeChild(app);
-            parent.normalize();
+            parent.normalize();*/
 
             return;
         }
@@ -182,6 +183,69 @@ public class XMLparser {
             return;
         } catch (SAXException sae) {
             return;
+        }
+    }
+
+    void overwrite(Vector<jobApp> applications) {
+        try {
+            Element listNode, rootNode, compNameNode, jobIDNode, typeNode, appliedNode, urlNode, usernameNode, passwordNode, heardBackNode;
+            jobApp temp;
+            Document doc;
+
+            doc = createFile();
+            listNode = doc.createElement("List");
+            doc.appendChild(listNode);
+
+            for(int i = 0; i < applications.size(); i++) {
+                temp = applications.elementAt(i);
+
+                rootNode = doc.createElement("Application");
+                listNode.appendChild(rootNode);
+
+                compNameNode = doc.createElement("CompanyName");
+                compNameNode.appendChild(doc.createTextNode(temp.companyName));
+                rootNode.appendChild(compNameNode);
+
+                compNameNode = doc.createElement("JobTitle");
+                compNameNode.appendChild(doc.createTextNode(temp.jobTitle));
+                rootNode.appendChild(compNameNode);
+
+                jobIDNode = doc.createElement("JobID");
+                jobIDNode.appendChild(doc.createTextNode(temp.jobID));
+                rootNode.appendChild(jobIDNode);
+
+                typeNode = doc.createElement("Type");
+                typeNode.appendChild(doc.createTextNode(temp.type));
+                rootNode.appendChild(typeNode);
+
+                appliedNode = doc.createElement("Applied");
+                appliedNode.appendChild(doc.createTextNode(String.valueOf(temp.applied)));
+                rootNode.appendChild(appliedNode);
+
+                urlNode = doc.createElement("URL");
+                urlNode.appendChild(doc.createTextNode(temp.url));
+                rootNode.appendChild(urlNode);
+
+                usernameNode = doc.createElement("Username");
+                usernameNode.appendChild(doc.createTextNode(temp.username));
+                rootNode.appendChild(usernameNode);
+
+                passwordNode = doc.createElement("Password");
+                passwordNode.appendChild(doc.createTextNode(temp.password));
+                rootNode.appendChild(passwordNode);
+
+                heardBackNode = doc.createElement("HeardBack");
+                heardBackNode.appendChild(doc.createTextNode(String.valueOf(temp.heardBack)));
+                rootNode.appendChild(heardBackNode);
+            }
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("test.xml"));
+
+            transformer.transform(source, result);
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
         }
     }
 }
