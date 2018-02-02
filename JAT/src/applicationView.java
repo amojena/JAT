@@ -29,6 +29,7 @@ public class applicationView {
 
     void showApp(jobApp app)
     {
+        System.out.println(app.companyName);
         companyNameShow.setText(app.companyName);
         jobTitleShow.setText(app.jobTitle);
         jobIdShow.setText(app.jobID);

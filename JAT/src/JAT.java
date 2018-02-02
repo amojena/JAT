@@ -137,6 +137,7 @@ public class JAT extends JFrame {
                 JFrame appView = new JFrame();
                 applicationView app = new applicationView();
                 int index = applicationsList.getSelectedIndex();
+                System.out.println(Integer.toString(index));
                 app.showApp(applications.elementAt(index));
                 appView.setContentPane(app.mainPanel);
                 appView.setSize(350,300);
@@ -152,7 +153,8 @@ public class JAT extends JFrame {
                 if(applicationsList.getSelectedIndex() != -1)
                 {
                     //remove selected application from saved applications vector
-                    applications.remove(applicationsList.getSelectedIndex());
+                    jobApp delete = applications.remove(applicationsList.getSelectedIndex());
+                    delete.applicationsSaved--;
 
                     //delete from xml
                     parser.delete(applicationsList.getSelectedIndex());
@@ -190,5 +192,6 @@ public class JAT extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
     }
 }

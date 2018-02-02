@@ -13,9 +13,12 @@ import java.util.Vector;
 
 public class XMLparser {
 
+    private String path = "test.xml";
+
     void write(Vector<jobApp> applications) {
         try {
-            File check = new File("test.xml");
+
+            File check = new File(path);
             Element listNode, rootNode, compNameNode, jobIDNode, typeNode, appliedNode, urlNode, usernameNode, passwordNode, heardBackNode;
             jobApp temp;
             Document doc;
@@ -73,7 +76,10 @@ public class XMLparser {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("test.xml"));
+            StreamResult result = new StreamResult(new File(path));
+            System.out.println("Created file");
+            System.out.println("Working Directory = " +
+                    System.getProperty("user.dir"));
 
             transformer.transform(source, result);
         } catch (TransformerException tfe) {
@@ -98,7 +104,7 @@ public class XMLparser {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse("test.xml");
+            Document doc = docBuilder.parse(path);
             if (doc == null) {return null;}
             return doc;
         } catch (ParserConfigurationException pce) {
@@ -116,7 +122,7 @@ public class XMLparser {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse("test.xml");
+            Document doc = docBuilder.parse(path);
 
             NodeList list = doc.getElementsByTagName("Application");
 
@@ -168,7 +174,7 @@ public class XMLparser {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.parse("test.xml");
+            Document doc = docBuilder.parse(path);
             Element app = (Element) doc.getElementsByTagName("Application").item(index);
             app.getParentNode().removeChild(app);
             /*Node parent = app.getParentNode();
@@ -241,7 +247,7 @@ public class XMLparser {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("test.xml"));
+            StreamResult result = new StreamResult(new File(path));
 
             transformer.transform(source, result);
         } catch (TransformerException tfe) {
