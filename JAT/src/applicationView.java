@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class applicationView {
     private JLabel companyNameLbl;
@@ -22,6 +24,21 @@ public class applicationView {
     private JPanel labelPanel;
     private JPanel showPanel;
     public JPanel mainPanel;
+    private JPanel topSpacePanel;
+    private JPanel bottomSpacePanel;
+    private JPanel leftSpacePanel;
+    private JPanel rightSpacePanel;
+    private JButton closeButton;
+
+    public applicationView(JFrame appView, JFrame mainFrame) {
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //close the window if the button is pressed
+                appView.setVisible(false);
+            }
+        });
+    }
 
     void showApp(jobApp app)
     {

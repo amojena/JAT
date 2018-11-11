@@ -12,16 +12,23 @@ public class jobApp {
 
     jobApp(String _companyName, String _jobTitle, String _jobId, String _type, boolean _applied, String _url, String _username, String _password, boolean _heardBack)
     {
-        companyName = _companyName;
-        jobTitle = _jobTitle;
-        jobID = _jobId;
-        type = _type;
+        companyName = validateInput(_companyName);
+        jobTitle = validateInput(_jobTitle);
+        jobID = validateInput(_jobId);
+        type = validateInput(_type);
         applied = _applied;
-        url = _url;
-        username = _username;
-        password = _password;
+        url = validateInput(_url);
+        username = validateInput(_username);
+        password = validateInput(_password);
         heardBack = _heardBack;
         applicationsSaved += 1;
     }
 
+    private String validateInput(String input)
+    {
+        if (input.equals("")) { return "N/A"; }
+        return input;
+    }
+
+    public void deleteApp() {applicationsSaved--;}
 }
