@@ -28,20 +28,9 @@ public class applicationView {
     private JPanel bottomSpacePanel;
     private JPanel leftSpacePanel;
     private JPanel rightSpacePanel;
-    private JButton closeButton;
 
-    public applicationView(JFrame appView, JFrame mainFrame) {
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //close the window if the button is pressed
-                appView.setVisible(false);
-            }
-        });
-    }
-
-    void showApp(jobApp app)
-    {
+    void showApp(jobApp app) {
+        System.out.println(app.companyName);
         companyNameShow.setText(app.companyName);
         jobTitleShow.setText(app.jobTitle);
         jobIdShow.setText(app.jobID);

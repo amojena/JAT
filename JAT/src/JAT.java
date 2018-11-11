@@ -47,7 +47,6 @@ public class JAT extends JFrame {
     private XMLparser parser;
     private Vector<jobApp> appXML;
     private boolean editing = false;
-    private int editingIndex = -1;
 
     private JAT(JFrame frame) {
         // create List for main window
@@ -153,6 +152,7 @@ public class JAT extends JFrame {
                     appList.set(editingIndex, newJobApp.companyName + " - " + newJobApp.jobTitle);
                 }
                 // update list in main window
+                appList.addElement(j.companyName + " - " + j.jobTitle);
                 applicationsList.setModel(appList);
 
                 parser.write(applications);
@@ -167,6 +167,7 @@ public class JAT extends JFrame {
                 JFrame appView = new JFrame();
                 applicationView app = new applicationView(appView, frame); // appView frame as input
                 int index = applicationsList.getSelectedIndex();
+                System.out.println(Integer.toString(index));
                 app.showApp(applications.elementAt(index));
                 appView.setContentPane(app.mainPanel);
                 appView.setSize(350, 300);
@@ -242,6 +243,30 @@ public class JAT extends JFrame {
 
                 }
 
+            }
+        });
+
+        // delete button functionality
+        deleteApplicationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (applicationsList.getSelectedIndex() != -1) {
+                    // remove selected application from saved applications vector
+                    jobApp delete = applications.remove(applicationsList.getSelectedIndex());
+                    delete.applicationsSaved--;
+
+                    // delete from xml
+                    parser.delete(applicationsList.getSelectedIndex());
+
+                    // remove from list displayed in gui
+                    appList.remove(applicationsList.getSelectedIndex());
+
+                    // decrease amount of applictions saved by 1
+                    applicationsSavedValue.setText(Integer.toString(applications.size()));
+
+                    // overwrite xml file
+                    parser.overwrite(applications);
+                }
             }
         });
     }
