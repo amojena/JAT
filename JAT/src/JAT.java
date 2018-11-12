@@ -134,6 +134,7 @@ public class JAT extends JFrame {
 
                 // uptdate values on existing jobApp
                 else {
+                    int editingIndex = applicationsList.getSelectedIndex();
                     newJobApp = applications.elementAt(editingIndex);
                     newJobApp.companyName = compName;
                     newJobApp.jobTitle = jobTitle;
@@ -152,7 +153,7 @@ public class JAT extends JFrame {
                     appList.set(editingIndex, newJobApp.companyName + " - " + newJobApp.jobTitle);
                 }
                 // update list in main window
-                appList.addElement(j.companyName + " - " + j.jobTitle);
+                //appList.addElement(newJobApp.companyName + " - " + newJobApp.jobTitle);
                 applicationsList.setModel(appList);
 
                 parser.write(applications);
@@ -165,7 +166,7 @@ public class JAT extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFrame appView = new JFrame();
-                applicationView app = new applicationView(appView, frame); // appView frame as input
+                applicationView app = new applicationView(appView); // appView frame as input
                 int index = applicationsList.getSelectedIndex();
                 System.out.println(Integer.toString(index));
                 app.showApp(applications.elementAt(index));
@@ -203,7 +204,7 @@ public class JAT extends JFrame {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                editingIndex = applicationsList.getSelectedIndex();
+                int editingIndex = applicationsList.getSelectedIndex();
                 // check if an application from the list has been selected to edit
                 if (editingIndex != -1) {
                     // editing mode needed for save functionality

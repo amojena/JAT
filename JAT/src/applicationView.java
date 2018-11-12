@@ -28,6 +28,17 @@ public class applicationView {
     private JPanel bottomSpacePanel;
     private JPanel leftSpacePanel;
     private JPanel rightSpacePanel;
+    private JButton closeButton;
+
+
+    public applicationView(JFrame appView) {
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                appView.setVisible(false);
+            }
+        });
+    }
 
     void showApp(jobApp app) {
         System.out.println(app.companyName);
