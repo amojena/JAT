@@ -1,3 +1,4 @@
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -67,15 +68,6 @@ public class ExcelWriter {
                 cell.setCellValue(appDetail);
                 cell.setCellStyle(dataCellStyle);
             }
-//            row.createCell(0).setCellValue(app.companyName);
-//            row.createCell(1).setCellValue(app.jobTitle);
-//            row.createCell(2).setCellValue(app.jobID);
-//            row.createCell(3).setCellValue(app.type);
-//            row.createCell(4).setCellValue(app.applied);
-//            row.createCell(5).setCellValue(app.url);
-//            row.createCell(6).setCellValue(app.username);
-//            row.createCell(7).setCellValue(app.password);
-//            row.createCell(8).setCellValue(app.heardBack);
 
         }
 
@@ -91,4 +83,8 @@ public class ExcelWriter {
         workbook.close();
 
     }
+
+    //TODO write read function that will read in job applications created
+    //TODO write an append function so that it doesn't write a new file every time
+    //TODO find a way to sort by Company name -> Job Title so excel file looks nice
 }
