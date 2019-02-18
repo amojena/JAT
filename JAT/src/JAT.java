@@ -1,7 +1,10 @@
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
 import javax.swing.*;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.*;
 
 public class JAT extends JFrame {
@@ -40,6 +43,7 @@ public class JAT extends JFrame {
     private JLabel applicationsSavedValue;
     private JButton deleteApplicationButton;
     private JButton editButton;
+    private JButton excelTest;
 
     private DefaultListModel appList;
     private Vector<jobApp> applications;
@@ -140,11 +144,11 @@ public class JAT extends JFrame {
                     newJobApp.jobTitle = jobTitle;
                     newJobApp.jobID = jobID;
                     newJobApp.type = type;
-                    newJobApp.applied = applied;
+                    newJobApp.applied = newJobApp.boolToString(applied);
                     newJobApp.url = url;
                     newJobApp.username = username;
                     newJobApp.password = password;
-                    newJobApp.heardBack = heardBack;
+                    newJobApp.heardBack = newJobApp.boolToString(heardBack);
 
                     // update jobApp on applications vector
                     applications.insertElementAt(newJobApp, editingIndex);
@@ -180,9 +184,10 @@ public class JAT extends JFrame {
         deleteApplicationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Deleting...");
                 if (applicationsList.getSelectedIndex() != -1) {
                     // remove selected application from saved applications vector
-                    //jobApp delete = applications.remove(applicationsList.getSelectedIndex());
+                    applications.remove(applicationsList.getSelectedIndex());
                     jobApp.deleteApp();
 
                     // delete from xml
@@ -192,7 +197,7 @@ public class JAT extends JFrame {
                     appList.remove(applicationsList.getSelectedIndex());
 
                     // decrease amount of applictions saved by 1
-                    applicationsSavedValue.setText(Integer.toString(applications.size()));
+                    applicationsSavedValue.setText(Integer.toString(jobApp.applicationsSaved));
 
                     // overwrite xml file
                     parser.overwrite(applications);
@@ -228,7 +233,7 @@ public class JAT extends JFrame {
 
                     typeComboBox.setSelectedIndex(comboBoxIndex);
 
-                    if (toEdit.applied)
+                    if (toEdit.applied.equals("Yes"))
                         appliedBtn.setSelected(true);
 
                     urlTxt.setText(toEdit.url);
@@ -239,7 +244,7 @@ public class JAT extends JFrame {
                     else
                         passwordTxt.setText(toEdit.password);
 
-                    if (toEdit.heardBack)
+                    if (toEdit.heardBack.equals("Yes"))
                         heardBackBtn.setSelected(true);
 
                 }
@@ -247,26 +252,16 @@ public class JAT extends JFrame {
             }
         });
 
-        // delete button functionality
-        deleteApplicationButton.addActionListener(new ActionListener() {
+        excelTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (applicationsList.getSelectedIndex() != -1) {
-                    // remove selected application from saved applications vector
-                    jobApp delete = applications.remove(applicationsList.getSelectedIndex());
-                    jobApp.applicationsSaved--;
-
-                    // delete from xml
-                    parser.delete(applicationsList.getSelectedIndex());
-
-                    // remove from list displayed in gui
-                    appList.remove(applicationsList.getSelectedIndex());
-
-                    // decrease amount of applications saved by 1
-                    applicationsSavedValue.setText(Integer.toString(applications.size()));
-
-                    // overwrite xml file
-                    parser.overwrite(applications);
+                ExcelWriter ew = new ExcelWriter();
+                try {
+                    ew.write(applications);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (InvalidFormatException e1) {
+                    e1.printStackTrace();
                 }
             }
         });
