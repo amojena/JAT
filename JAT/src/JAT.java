@@ -66,7 +66,7 @@ public class JAT extends JFrame {
         // saved applications will be added to this vector
         applications = parser.getExistingApplications();
         if (applications.size() > 0)
-            applicationsSavedValue.setText(Integer.toString(applications.elementAt(0).applicationsSaved));
+            applicationsSavedValue.setText(Integer.toString(jobApp.applicationsSaved));
 
         // update list in main window
         for (int i = 0; i < applications.size(); i++) {
@@ -99,7 +99,7 @@ public class JAT extends JFrame {
                 String password = String.valueOf(passwordTxt.getPassword());
                 boolean heardBack = heardBackBtn.isSelected();
 
-                // validate company name and job title before creating an application object
+                // validate company name and job title are not empty before creating an application object
                 if (compName.equals("") | jobTitle.equals("")) {
                     // display an error message
                     JFrame noSave = new JFrame();
@@ -108,8 +108,8 @@ public class JAT extends JFrame {
                     return; // exit function
                 }
 
+                // validate job type is not empty before creating an application object
                 if (typeComboBox.getSelectedIndex() == 0) {
-                    // display an error message
                     JFrame noSave = new JFrame();
                     JOptionPane.showMessageDialog(noSave, "You must specify job type.", "Error",
                             JOptionPane.PLAIN_MESSAGE);
@@ -128,11 +128,11 @@ public class JAT extends JFrame {
                     applications.addElement(newJobApp);
 
                     // update amount of saved applications in main window
-                    applicationsSavedValue.setText(Integer.toString(newJobApp.applicationsSaved));
+                    applicationsSavedValue.setText(Integer.toString(jobApp.applicationsSaved));
                     appList.addElement(newJobApp.companyName + " - " + newJobApp.jobTitle);
                 }
 
-                // uptdate values on existing jobApp
+                // update values on existing jobApp
                 else {
                     int editingIndex = applicationsList.getSelectedIndex();
                     newJobApp = applications.elementAt(editingIndex);
@@ -182,8 +182,8 @@ public class JAT extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (applicationsList.getSelectedIndex() != -1) {
                     // remove selected application from saved applications vector
-                    jobApp delete = applications.remove(applicationsList.getSelectedIndex());
-                    delete.applicationsSaved--;
+                    //jobApp delete = applications.remove(applicationsList.getSelectedIndex());
+                    jobApp.deleteApp();
 
                     // delete from xml
                     parser.delete(applicationsList.getSelectedIndex());
@@ -254,7 +254,7 @@ public class JAT extends JFrame {
                 if (applicationsList.getSelectedIndex() != -1) {
                     // remove selected application from saved applications vector
                     jobApp delete = applications.remove(applicationsList.getSelectedIndex());
-                    delete.applicationsSaved--;
+                    jobApp.applicationsSaved--;
 
                     // delete from xml
                     parser.delete(applicationsList.getSelectedIndex());
@@ -262,7 +262,7 @@ public class JAT extends JFrame {
                     // remove from list displayed in gui
                     appList.remove(applicationsList.getSelectedIndex());
 
-                    // decrease amount of applictions saved by 1
+                    // decrease amount of applications saved by 1
                     applicationsSavedValue.setText(Integer.toString(applications.size()));
 
                     // overwrite xml file
@@ -287,7 +287,7 @@ public class JAT extends JFrame {
         JFrame frame = new JFrame();
         JAT g = new JAT(frame);
         frame.setContentPane(g.mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Jframe.EXIT
         frame.pack();
         frame.setVisible(true);
 

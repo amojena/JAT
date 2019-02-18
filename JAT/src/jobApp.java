@@ -26,9 +26,9 @@ public class jobApp {
 
     private String validateInput(String input)
     {
-        if (input.equals("")) { return "N/A"; }
+        if (input.equals("")) { return "-"; }
         return input;
     }
 
-    public void deleteApp() {applicationsSaved--;}
+    static void deleteApp() {applicationsSaved--;}
 }
