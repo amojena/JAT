@@ -1,5 +1,3 @@
-import com.sun.xml.internal.bind.v2.TODO;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -7,16 +5,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.util.Vector;
 
-public class ExcelWriter {
+public class ExcelManager {
     private static String[] columns = {"Company Name", "Job Title", "Job ID", "Type",
     "Applied?", "URL", "Username", "Password", "Heard Back?"};
 
     private String path = "test.xlsx";
 
     /*
-    Code for this function taken from https://www.callicoder.com/java-write-excel-file-apache-poi/
+    Code for read and write function taken from https://www.callicoder.com/java-write-excel-file-apache-poi/
     */
-    void write(Vector<jobApp> applications) throws IOException, InvalidFormatException {
+    void write(Vector<jobApp> applications) throws IOException{
 
         //Create workbook
         Workbook workbook = new XSSFWorkbook();
@@ -85,6 +83,61 @@ public class ExcelWriter {
     }
 
     //TODO write read function that will read in job applications created
+    Vector<jobApp> read() throws IOException, InvalidFormatException
+    {
+        //Saved applications to be returned
+        Vector<jobApp> savedApps = new Vector<>(0);
+
+        // Obtain a workbook from the excel file
+        Workbook workbook = WorkbookFactory.create(new File("test.xlsx"));
+
+        // Get Sheet at index 0
+        Sheet sheet = workbook.getSheetAt(0);
+
+        // Read details of first application
+        int rowIndex = 3;
+        Row row = sheet.getRow(rowIndex++);
+
+        //run while there is a company name in the first cell of the row
+        while (row != null)
+        {
+            jobApp app = new jobApp();
+            app.companyName = row.getCell(0).getStringCellValue();
+            app.jobTitle    = row.getCell(1).getStringCellValue();
+            app.jobID       = row.getCell(2).getStringCellValue();
+            app.type        = row.getCell(3).getStringCellValue();
+            app.applied     = row.getCell(4).getStringCellValue();
+            app.url         = row.getCell(5).getStringCellValue();
+            app.username    = row.getCell(6).getStringCellValue();
+            app.password    = row.getCell(7).getStringCellValue();
+            app.heardBack   = row.getCell(8).getStringCellValue();
+            app.print();
+            savedApps.addElement(app);
+
+            row = sheet.getRow(rowIndex++);
+        }
+
+        //close workbook
+        workbook.close();
+
+        return savedApps;
+    }
+
+    void delete(int delIndex) throws IOException, InvalidFormatException {
+        // Obtain a workbook from the excel file
+        Workbook workbook = WorkbookFactory.create(new File("test.xlsx"));
+
+        // Get Sheet at index 0
+        Sheet sheet = workbook.getSheetAt(0);
+
+        // Read details of first application
+        Row row = sheet.getRow(delIndex + 3);
+        sheet.removeRow(row);
+
+        workbook.close();
+    }
+
+
     //TODO write an append function so that it doesn't write a new file every time
     //TODO find a way to sort by Company name -> Job Title so excel file looks nice
 }
