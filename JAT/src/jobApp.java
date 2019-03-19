@@ -10,6 +10,8 @@ public class jobApp {
     String password;
     String heardBack;
 
+    jobApp() {applicationsSaved += 1;}
+
     jobApp(String _companyName, String _jobTitle, String _jobId, String _type, boolean _applied, String _url, String _username, String _password, boolean _heardBack)
     {
         companyName = validateInput(_companyName);
@@ -37,4 +39,9 @@ public class jobApp {
     }
 
     static void deleteApp() {applicationsSaved--;}
+
+    public void print()
+    {
+        System.out.println(companyName + " - " + jobTitle);
+    }
 }

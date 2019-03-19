@@ -66,11 +66,17 @@ public class JAT extends JFrame {
         textFields.addElement(jobIDtxt);
 
         parser = new XMLparser();
+        ExcelManager excelMan = new ExcelManager();
+
+        //TESTING EXCEL MANAGER READ FUNCTION
+        try {
+            applications = excelMan.read();
+        } catch (IOException | InvalidFormatException e1) {
+            e1.printStackTrace();
+        }
 
         // saved applications will be added to this vector
-        applications = parser.getExistingApplications();
-        if (applications.size() > 0)
-            applicationsSavedValue.setText(Integer.toString(jobApp.applicationsSaved));
+        applicationsSavedValue.setText(Integer.toString(applications.size()));
 
         // update list in main window
         for (int i = 0; i < applications.size(); i++) {
@@ -107,8 +113,8 @@ public class JAT extends JFrame {
                 if (compName.equals("") | jobTitle.equals("")) {
                     // display an error message
                     JFrame noSave = new JFrame();
-                    JOptionPane.showMessageDialog(noSave, "You must input a Company Name and Job Title.", "Error",
-                            JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(noSave, "You must input a Company Name and Job Title.",
+                            "Error", JOptionPane.PLAIN_MESSAGE);
                     return; // exit function
                 }
 
@@ -160,7 +166,11 @@ public class JAT extends JFrame {
                 //appList.addElement(newJobApp.companyName + " - " + newJobApp.jobTitle);
                 applicationsList.setModel(appList);
 
-                parser.write(applications);
+                try {
+                    excelMan.write(applications);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
 
             }
         });
@@ -172,7 +182,7 @@ public class JAT extends JFrame {
                 JFrame appView = new JFrame();
                 applicationView app = new applicationView(appView); // appView frame as input
                 int index = applicationsList.getSelectedIndex();
-                System.out.println(Integer.toString(index));
+                //System.out.println(Integer.toString(index));
                 app.showApp(applications.elementAt(index));
                 appView.setContentPane(app.mainPanel);
                 appView.setSize(350, 300);
@@ -190,8 +200,11 @@ public class JAT extends JFrame {
                     applications.remove(applicationsList.getSelectedIndex());
                     jobApp.deleteApp();
 
-                    // delete from xml
-                    parser.delete(applicationsList.getSelectedIndex());
+                    // delete from excel
+                    try {
+                        excelMan.delete(applicationsList.getSelectedIndex());
+                    } catch (IOException | InvalidFormatException e1)
+                    {System.out.println("Couldn't delete");}
 
                     // remove from list displayed in gui
                     appList.remove(applicationsList.getSelectedIndex());
@@ -200,7 +213,11 @@ public class JAT extends JFrame {
                     applicationsSavedValue.setText(Integer.toString(jobApp.applicationsSaved));
 
                     // overwrite xml file
-                    parser.overwrite(applications);
+                    try {
+                        excelMan.write(applications);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
@@ -255,12 +272,9 @@ public class JAT extends JFrame {
         excelTest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ExcelWriter ew = new ExcelWriter();
                 try {
-                    ew.write(applications);
+                    excelMan.write(applications);
                 } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (InvalidFormatException e1) {
                     e1.printStackTrace();
                 }
             }
