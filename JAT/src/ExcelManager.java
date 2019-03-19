@@ -10,6 +10,7 @@ public class ExcelManager {
     "Applied?", "URL", "Username", "Password", "Heard Back?"};
 
     private String path = "test.xlsx";
+    static private int lastRow;
 
     /*
     Code for read and write function taken from https://www.callicoder.com/java-write-excel-file-apache-poi/
@@ -82,12 +83,19 @@ public class ExcelManager {
 
     }
 
+    private boolean fileExists(){
+        return (new File("test.xlsx")).exists();
+    }
     //TODO write read function that will read in job applications created
     Vector<jobApp> read() throws IOException, InvalidFormatException
     {
         //Saved applications to be returned
         Vector<jobApp> savedApps = new Vector<>(0);
 
+        if (!fileExists()) {
+            System.out.println("Base file does not exist.");
+            return  savedApps;
+        }
         // Obtain a workbook from the excel file
         Workbook workbook = WorkbookFactory.create(new File("test.xlsx"));
 
@@ -96,6 +104,7 @@ public class ExcelManager {
 
         // Read details of first application
         int rowIndex = 3;
+        lastRow = rowIndex;
         Row row = sheet.getRow(rowIndex++);
 
         //run while there is a company name in the first cell of the row
@@ -119,7 +128,7 @@ public class ExcelManager {
 
         //close workbook
         workbook.close();
-
+        lastRow = rowIndex;
         return savedApps;
     }
 
@@ -135,8 +144,8 @@ public class ExcelManager {
         sheet.removeRow(row);
 
         workbook.close();
+        lastRow--;
     }
-
 
     //TODO write an append function so that it doesn't write a new file every time
     //TODO find a way to sort by Company name -> Job Title so excel file looks nice

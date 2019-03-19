@@ -269,16 +269,6 @@ public class JAT extends JFrame {
             }
         });
 
-        excelTest.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    excelMan.write(applications);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
     }
 
     private void clearFields() {
